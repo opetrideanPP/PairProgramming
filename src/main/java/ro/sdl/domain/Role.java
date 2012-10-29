@@ -1,5 +1,7 @@
 package ro.sdl.domain;
 
+import javax.persistence.Entity;
+
 /**
  * Created by IntelliJ IDEA.
  * User: rbordea
@@ -7,6 +9,7 @@ package ro.sdl.domain;
  * Time: 10:19
  * To change this template use File | Settings | File Templates.
  */
+
 public enum Role {
     QA,
     DEV;

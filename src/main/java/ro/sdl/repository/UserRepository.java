@@ -3,16 +3,19 @@ package ro.sdl.repository;
 import ro.sdl.domain.*;
 
 import java.util.Collection;
+import java.util.List;
+
 
 public interface UserRepository {
 
-    User load(long userId) throws RepositoryException;
+    void add(User user);
 
-	Collection<User> getUsers() throws RepositoryException;
+    User get(Integer id);
 
-	void add(User user) throws RepositoryException;
+    void update(User user);
 
-	void update(User user) throws RepositoryException;
+    void delete(User user);
 
-	void delete(long userId) throws RepositoryException;
+    Collection<User> getAll();
+
 }

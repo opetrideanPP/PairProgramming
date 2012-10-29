@@ -1,7 +1,8 @@
 package ro.sdl.service;
 
 
-import ro.sdl.application.data.AppDataLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ro.sdl.domain.Project;
 import ro.sdl.domain.Role;
 import ro.sdl.domain.State;
@@ -9,15 +10,40 @@ import ro.sdl.domain.User;
 import ro.sdl.dto.ProjectDetailedDistributionDTO;
 import ro.sdl.dto.ProjectDistributionDTO;
 import ro.sdl.dto.ProjectStateDistributionDTO;
-import ro.sdl.repository.*;
+import ro.sdl.repository.ProjectRepository;
+import ro.sdl.repository.RepositoryException;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Service
 public class ProjectServiceImpl implements ProjectService {
-    ProjectRepository projectRepository = new ProjectRepositoryMemoryImpl();
-    UserRepository userRepository = new UserRepositoryMemoryImpl();
+
+    @Autowired
+    ProjectRepository projectRepository;
+
+
+    public void add(Project project) {
+        projectRepository.add(project);
+    }
+
+    public void update(Project project) {
+        projectRepository.update(project);
+    }
+
+    public void delete(Project project) {
+        projectRepository.delete(project);
+    }
+
+    public Project get(Integer id) {
+        return projectRepository.get(id);
+    }
+
+    public List<Project> getAll() {
+            return (List<Project>) projectRepository.getAll();
+    }
+
 
     /**
      * @param project: the project
@@ -26,10 +52,10 @@ public class ProjectServiceImpl implements ProjectService {
      *         false if the user could not be found for the project
      */
     public Boolean removeUserFromProject(Project project, User user) {
-        if (projectRepository.getProjectUsers(project).contains(user)) {
-            project.getUsers().remove(user);
-            return true;
-        }
+//        if (projectRepository.getProjectUsers(project).contains(user)) {
+//            project.getUsers().remove(user);
+//            return true;
+//        }
         return false;
     }
 
@@ -43,7 +69,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @return list of users as described above
      */
     public List<User> getProjectComposition(Project project) {
-        return projectRepository.getProjectUsers(project);
+        return (List<User>)project.getUsers();
     }
 
     /**
@@ -57,19 +83,20 @@ public class ProjectServiceImpl implements ProjectService {
      * @return : a project distribution object
      */
     public ProjectDistributionDTO getProjectDistribution(Project project) {
-        ProjectDistributionDTO projectDistributionDTO = new ProjectDistributionDTO();
-        int devCount = 0;
-        int qaCount = 0;
-        for (User currentUser : projectRepository.getProjectUsers(project)) {
-            if (currentUser.getRole().equals(Role.DEV)) {
-                devCount++;
-            } else
-                qaCount++;
-        }
-
-        projectDistributionDTO.setDevPercentage((devCount * 100 / projectRepository.getProjectUsers(project).size()));
-        projectDistributionDTO.setQaPercentage((qaCount * 100 / projectRepository.getProjectUsers(project).size()));
-        return projectDistributionDTO;
+//        ProjectDistributionDTO projectDistributionDTO = new ProjectDistributionDTO();
+//        int devCount = 0;
+//        int qaCount = 0;
+//        for (User currentUser : projectRepository.getProjectUsers(project)) {
+//            if (currentUser.getRole().equals(Role.DEV)) {
+//                devCount++;
+//            } else
+//                qaCount++;
+//        }
+//
+//        projectDistributionDTO.setDevPercentage((devCount * 100 / projectRepository.getProjectUsers(project).size()));
+//        projectDistributionDTO.setQaPercentage((qaCount * 100 / projectRepository.getProjectUsers(project).size()));
+//        return projectDistributionDTO;
+        return null;
     }
 
     /**
@@ -89,7 +116,7 @@ public class ProjectServiceImpl implements ProjectService {
      */
     public ProjectDetailedDistributionDTO getProjectDetailedDistribution(Project project) {
         ProjectDetailedDistributionDTO projectDetailedDistributionDTO = new ProjectDetailedDistributionDTO();
-        projectDetailedDistributionDTO = getDetailedDistribution(projectRepository.getProjectUsers(project));
+        projectDetailedDistributionDTO = getDetailedDistribution(project.getUsers());
         return projectDetailedDistributionDTO;
     }
 
@@ -110,17 +137,20 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDetailedDistributionDTO getStructureDistribution() {
         ArrayList<User> users = new ArrayList<User>();
 
-        for (Project project : AppDataLoader.projects) {
-            for (User user : project.getUsers()) {
-                users.add(user);
-            }
-        }
-        ProjectDetailedDistributionDTO projectDetailedDistributionDTO = getDetailedDistribution(users);
-        return projectDetailedDistributionDTO;
+//        for (Project project : AppDataLoader.projects) {
+//            for (User user : project.getUsers()) {
+//                users.add(user);
+//            }
+//        }
+//        ProjectDetailedDistributionDTO projectDetailedDistributionDTO = getDetailedDistribution(users);
+//        return projectDetailedDistributionDTO;
+        return null;
     }
+
     public ProjectDetailedDistributionDTO getProjectDetailedDistribution() throws RepositoryException {
-        ProjectDetailedDistributionDTO projectDetailedDistributionDTO = getDetailedDistribution(userRepository.getUsers());
-        return projectDetailedDistributionDTO;
+//        ProjectDetailedDistributionDTO projectDetailedDistributionDTO = getDetailedDistribution(userRepository.getUsers());
+//        return projectDetailedDistributionDTO;
+        return null;
     }
 
 
@@ -179,8 +209,8 @@ public class ProjectServiceImpl implements ProjectService {
         int devCount = 0;
         int qaCount = 0;
         List<Project> projects = new ArrayList<Project>();
-        for (Project currentProject : projectRepository.getProjects()) {
-            for (User currentUser : projectRepository.getProjectUsers(currentProject)) {
+        for (Project currentProject : projectRepository.getAll()) {
+            for (User currentUser : currentProject.getUsers()) {
                 if (currentUser.getRole().equals(Role.DEV)) {
                     devCount++;
                 } else

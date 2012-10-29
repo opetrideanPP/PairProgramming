@@ -10,6 +10,16 @@ import java.util.List;
 
 public interface ProjectService {
 
+    public void add(Project project);
+
+    public void update(Project project);
+
+    public void delete(Project project);
+
+    public Project get(Integer id);
+
+    public List<Project> getAll();
+
     public Boolean removeUserFromProject(Project project, User user);
 
     public ProjectDistributionDTO getProjectDistribution(Project project);

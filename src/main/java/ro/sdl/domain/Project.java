@@ -1,17 +1,21 @@
 package ro.sdl.domain;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.Set;
 
+
+@Entity
 public class Project {
 
-    public Project() {
-    }
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String description;
-    private List<User> users = new ArrayList<User>();
+
+    @ManyToMany
+    private Set<User> users;
+
 
     public Integer getId() {
         return id;
@@ -19,16 +23,6 @@ public class Project {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Project(Integer id, String description) {
-        this.id = id;
-        this.description = description;
-    }
-
-    public Project(Integer id, String description, List<User> users) {
-        this(id,description);
-        this.users = users;
     }
 
     public String getDescription() {
@@ -39,11 +33,11 @@ public class Project {
         this.description = description;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 
@@ -62,5 +56,14 @@ public class Project {
     @Override
     public int hashCode() {
         return description != null ? description.hashCode() : 0;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

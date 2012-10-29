@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface ProjectRepository {
 
-    Project load(Integer projectId) throws RepositoryException;
 
-    Collection<Project> getProjects() throws RepositoryException;
+    void add(Project project);
+    
+    Project get(Integer id);
 
-    void add(Project project) throws RepositoryException;
+    void update(Project project);
 
-    void update(Project project) throws RepositoryException;
+    void delete(Project project);
+    
+    Collection<Project> getAll();
 
-    void delete(Integer projectId) throws RepositoryException;
-
-    public List<User> getProjectUsers(Project project);
 }

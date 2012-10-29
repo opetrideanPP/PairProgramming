@@ -1,28 +1,21 @@
 package ro.sdl.domain;
 
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
     private Role role;     // dev, qa
     private State state;  // jr, mid , senior
-    private Project project;
 
-    public User(Integer id, String name, Role role, State state) {
-        this.id = id;
-        this.name = name;
-        this.role = role;
-        this.state = state;
-    }
+    @ManyToMany
+    private Set<Project> projects;
 
-    public User(){
-    
-    }
-
-    public User(Integer id, String name, Role role, State state, Project project) {
-        this(id, name, role, state);
-        this.project = project;
-    }
 
     public Integer getId() {
         return id;
@@ -32,12 +25,12 @@ public class User {
         this.id = id;
     }
 
-    public Project getProject() {
-        return project;
+    public Set<Project> getProjects() {
+        return projects;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 
     public String getName() {
@@ -84,5 +77,13 @@ public class User {
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
